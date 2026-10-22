@@ -7,7 +7,7 @@
 <!-- naver-site-verification: NAVER_VERIFY=값 node tools/gen.mjs -->
 <!-- google-site-verification: GOOGLE_VERIFY=값 node tools/gen.mjs -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="습관부자 미래 테스트">
+<meta property="og:site_name" content="습관부자 갓생 테스트">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:title" content="지금 습관 그대로면, 10년 뒤 나는?">
 <meta property="og:description" content="질문 7개로 보는 10년 뒤 내 모습. 1분이면 끝나요.">
@@ -15,17 +15,19 @@
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:url" content="https://seungsoos.github.io/habit-rich-future/">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"습관부자 미래 테스트","url":"https://seungsoos.github.io/habit-rich-future/","description":"질문 7개로 보는 10년 뒤 내 모습. 1분이면 끝나요.","applicationCategory":"EntertainmentApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"publisher":{"@type":"Organization","name":"습관부자"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"습관부자 갓생 테스트","url":"https://seungsoos.github.io/habit-rich-future/","description":"질문 7개로 보는 10년 뒤 내 모습. 1분이면 끝나요.","applicationCategory":"EntertainmentApplication","operatingSystem":"Web","inLanguage":"ko","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"publisher":{"@type":"Organization","name":"습관부자"}}</script>
 <link rel="stylesheet" href="style.css">
 </head><body>
 <main class="page">
   <section id="start" class="start">
+    <a id="mine" class="mine" hidden></a>
+    <p id="invite" class="invite" hidden></p>
     <img class="hero" src="img/sq/10.png" width="300" height="300" alt="평범한 직장인">
     <h1>지금 습관 그대로면,<br>10년 뒤 나는?</h1>
     <p class="sub">질문 7개 · 1분이면 끝나요</p>
-    <p id="vsInvite" class="vs" hidden></p>
-    <input id="nick" class="nick" maxlength="10" placeholder="닉네임 (안 써도 돼요)" autocomplete="off" hidden>
-    <button id="go" class="primary">테스트 시작</button>
+    <input id="name" class="nick" maxlength="8" placeholder="이름" autocomplete="off">
+    <p id="nameErr" class="hint" hidden>다른 이름으로 써 주세요</p>
+    <button id="go" class="primary" disabled>테스트 시작</button>
     <p class="about">텐트부터 건물주까지, 10년 뒤 나는 어디쯤일까요?</p>
   </section>
   <section id="quiz" class="quiz" hidden>

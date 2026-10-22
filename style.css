@@ -46,3 +46,25 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--green); outline
 .again { text-align: center; color: var(--muted); font-size: 14px; }
 footer { position: fixed; left: 0; right: 0; bottom: 0; text-align: center; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); font-size: 12px; color: var(--muted); background: var(--bg); border-top: 1px solid var(--line); }
 @media (prefers-reduced-motion: reduce) { #bar { transition: none; } }
+/* 명령 #96 유형 결과 */
+.who { text-align: center; color: var(--muted); font-size: 17px; font-weight: 800; margin: 0; }
+.typename { font-size: 30px; }
+.tags { text-align: center; color: var(--green); font-weight: 800; margin: 0; font-size: 15px; word-spacing: 4px; }
+.card { background: var(--card); border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.card h3 { margin: 0; font-size: 16px; font-weight: 900; }
+.lines { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; line-height: 1.5; }
+.future .bubble { background: var(--bg); padding: 12px 14px; }
+.futurehead { margin: 0; font-size: 17px; font-weight: 900; }
+.goalline { margin: 0; color: var(--green); font-weight: 800; }
+.match p { margin: 0; display: flex; gap: 10px; font-size: 15px; }
+.match b { width: 4em; flex: none; color: var(--muted); }
+.match a { color: var(--ink); font-weight: 800; }
+.board li .ty { color: var(--muted); font-size: 13px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.btnlink { display: block; text-align: center; text-decoration: none; font-weight: 800; border-radius: 14px; padding: 15px 16px; background: var(--ink); color: #fff; }
+/* 시작 화면 */
+.invite { margin: 0; text-align: center; font-weight: 900; font-size: 17px; }
+.mine { display: block; text-align: center; color: var(--green); font-weight: 800; }
+.hint { margin: -6px 0 0; font-size: 13px; color: #B3261E; }
+button:disabled { opacity: .35; cursor: default; }
+body.invited .hero { width: 140px; }
+body.invited .page { padding-top: 20px; }
