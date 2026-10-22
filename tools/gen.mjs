@@ -25,7 +25,7 @@ if (NAMES.length !== 50 || UP.length !== 50 || DOWN.length !== 50) throw new Err
 const BANDS = [[0, 5, 1, 4], [6, 11, 5, 9], [12, 16, 10, 14], [17, 20, 15, 22], [21, 21, 25, 25]];
 const lvOf = (s) => { const [a, b, l, h] = BANDS.find(([a, b]) => s >= a && s <= b); return a === b ? l : Math.round(l + ((s - a) * (h - l)) / (b - a)); };
 const MAP = Array.from({ length: 22 }, (_, s) => lvOf(s));
-const lineOf = (lv) => DOWN[lv - 1] ?? UP[lv - 1]; // 미래의 나 — 떨어졌을 때 문장, 없으면(Lv.50) 올라왔을 때
+const lineOf = (lv) => (lv <= 9 ? DOWN[lv - 1] : UP[lv - 1]) ?? DOWN[lv - 1] ?? UP[lv - 1]; // 미래의 나(명령 #93) — Lv.1~9 떨어졌을 때 문장, Lv.10~50 올라왔을 때 문장
 const goalOf = (lv) => Math.min(lv + 15, 50); // Lv.50 은 더 갈 칸이 없어 줄을 숨긴다
 
 /** 결과 페이지 설명(120자 안) — 칸마다 다르게 */
@@ -71,9 +71,8 @@ for (let lv = 1; lv <= 50; lv++) {
   <p class="bubble"><b>미래의 나</b> ${esc(lineOf(lv))}</p>
 ${lv < 50 ? `  <div class="goal"><img src="../img/sq/${goal}.png" width="64" height="64" alt=""><p>주 3번만 지켜도 → <b>Lv.${goal} ${esc(NAMES[goal - 1])}</b></p></div>
 ` : ''}  <div class="actions">
-    <button id="share" class="primary">결과 공유하기</button>
-    <button id="compare">친구랑 비교하기</button>
-    <button id="app">앱에서 바꾸기</button>
+    <button id="share" class="primary">친구한테 보내기</button>
+    <button id="app">앱으로 바꿔 보기</button>
   </div>
   <div id="stores" class="stores" hidden></div>
   <p id="toast" class="toast" hidden></p>

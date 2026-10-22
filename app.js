@@ -71,13 +71,13 @@
   var lv = num(document.body.dataset.lv);
   var shareUrl = function (q) { var u = new URL(lv + '.html', location.href); u.search = q || ''; return u.toString(); };
   var toast = function (t) { $('toast').hidden = false; $('toast').textContent = t; };
-  function share(url, title, cmp) {
-    var extra = cmp ? { c: 1 } : {};
+  // 공유는 언제나 비교 링크(r/N.html?vs=N) 하나 — 명령 #93
+  function share(url, title) {
     if (navigator.share) {
-      navigator.share({ title: title, url: url }).then(function () { track('share', Object.assign({ m: 1 }, extra)); }).catch(function () {});
+      navigator.share({ title: title, url: url }).then(function () { track('share', { m: 1 }); }).catch(function () {});
       return;
     }
-    var done = function () { track('share', Object.assign({ m: 2 }, extra)); toast('링크를 복사했어요'); };
+    var done = function () { track('share', { m: 2 }); toast('링크를 복사했어요'); };
     if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { prompt('이 링크를 복사해 주세요', url); });
     else prompt('이 링크를 복사해 주세요', url);
   }
@@ -93,8 +93,7 @@
     $('vs').textContent = '친구는 ' + lvName(friendDone) + ', 나는 ' + lvName(lv);
   }
 
-  $('share').onclick = function () { share(shareUrl(), '10년 뒤 나는 ' + lvName(lv), false); };
-  $('compare').onclick = function () { share(shareUrl('?vs=' + lv), '나는 ' + lvName(lv) + '. 너는?', true); };
+  $('share').onclick = function () { share(shareUrl('?vs=' + lv), '나는 ' + lvName(lv) + '. 너는?'); };
   $('app').onclick = function () {
     var ua = navigator.userAgent;
     var os = /iPhone|iPad|iPod/.test(ua) ? 1 : /Android/.test(ua) ? 2 : 3;
