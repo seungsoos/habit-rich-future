@@ -9,6 +9,9 @@
 
   var store = function (s, k, v) { try { if (v === undefined) return window[s].getItem(k); window[s].setItem(k, v); } catch (e) { return null; } };
   var params = new URLSearchParams(location.search);
+  // 계측 오염 방지(명령 #98): 로컬 주소·파일, 또는 ?test=1 로 '테스트 기기'가 된 브라우저(?test=0 해제)는 계측·순위표 저장을 안 보낸다
+  if (params.get('test') === '1' || params.get('test') === '0') store('localStorage', 'ft_test', params.get('test'));
+  var QUIET = location.protocol === 'file:' || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || store('localStorage', 'ft_test') === '1';
   var num = function (v) { var n = parseInt(v, 10); return isNaN(n) ? null : n; };
   var FT = window.FT;
 
@@ -18,6 +21,7 @@
   var wid = store('localStorage', 'ft_wid');
   if (!wid) { wid = Math.random().toString(36).slice(2) + Date.now().toString(36); store('localStorage', 'ft_wid', wid); }
   function track(ev, props) {
+    if (QUIET) return;
     var p = Object.assign({}, props || {}, { src: SRC });
     try {
       fetch(EVENTS.url + '/rest/v1/web_events', {
@@ -58,7 +62,7 @@
     return fetch(EVENTS.url + '/rest/v1/' + path, { method: 'POST', headers: h, body: JSON.stringify(body) });
   }
   function saveResult(lv, type, parent, name) {
-    if (!SHARED_ON) return Promise.resolve();
+    if (!SHARED_ON || QUIET) return Promise.resolve();
     var m = me();
     if (m) return api('rpc/my_update', { p_key: m.view, p_lv: lv, p_type: type, p_nickname: name }).catch(function () {});
     var row = { share_id: hex(12), view_key: hex(16), parent_id: parent && SHARE_RE.test(parent) ? parent : null, lv: lv, type: type, nickname: name };
