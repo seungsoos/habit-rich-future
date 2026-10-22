@@ -71,11 +71,13 @@ for (let lv = 1; lv <= 50; lv++) {
   <p class="bubble"><b>미래의 나</b> ${esc(lineOf(lv))}</p>
 ${lv < 50 ? `  <div class="goal"><img src="../img/sq/${goal}.png" width="64" height="64" alt=""><p>주 3번만 지켜도 → <b>Lv.${goal} ${esc(NAMES[goal - 1])}</b></p></div>
 ` : ''}  <div class="actions">
+    <div id="nameAsk" class="ask" hidden><input id="askNick" class="nick" maxlength="10" placeholder="친구들한테 보일 이름 (안 써도 돼요)" autocomplete="off"><button id="askGo" class="primary">보내기</button></div>
     <button id="share" class="primary">친구한테 보내기</button>
     <button id="app">앱으로 바꿔 보기</button>
   </div>
   <div id="stores" class="stores" hidden></div>
   <p id="toast" class="toast" hidden></p>
+  <section id="board" class="board" hidden></section>
   <a class="again" href="../index.html">다시 해 보기</a>
 </main>
 <footer>재미로 보는 테스트예요 · 습관부자</footer>
@@ -112,6 +114,7 @@ ${verify}
     <h1>지금 습관 그대로면,<br>10년 뒤 나는?</h1>
     <p class="sub">질문 7개 · 1분이면 끝나요</p>
     <p id="vsInvite" class="vs" hidden></p>
+    <input id="nick" class="nick" maxlength="10" placeholder="닉네임 (안 써도 돼요)" autocomplete="off" hidden>
     <button id="go" class="primary">테스트 시작</button>
     <p class="about">${INTRO}</p>
   </section>
