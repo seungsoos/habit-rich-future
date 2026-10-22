@@ -149,7 +149,7 @@
       var lv = FT.map[score], type = typeOf(items), name = cleanName(input.value);
       track('done', { lv: lv, score: score, type: type });
       store('localStorage', 'ft_name', name);
-      store('localStorage', 'ft_result', JSON.stringify({ type: type, lv: lv }));
+      store('localStorage', 'ft_result', JSON.stringify({ type: type, lv: lv, items: items })); // items: 다시 방문해도 '이런 사람이에요' 첫 줄(명령 #99)
       var go = function () { location.href = 't/' + type + '.html?lv=' + lv + '&me=1'; };
       saveResult(lv, type, from, name).then(go, go);
     };
@@ -164,6 +164,17 @@
   var isMine = params.get('me') === '1' && !from;
   var who = isMine ? cleanName(store('localStorage', 'ft_name')) : cleanName(params.get('n'));
   if (who) { $('who').hidden = false; $('who').textContent = who + '님은'; }
+
+  // ③ 약점 유형(2~7) 내 결과: 첫 줄 = 유형을 정한 문항(유형-2번)에서 내가 고른 답(0·1점). 친구가 보낸 링크는 고정 2줄만
+  var ANSWER = [['알람 끈 기억조차 없어요.', '5분만을 세 번은 해야 일어나요.'], ['계단 오른 것도 운동으로 치고 싶어요.', '이번 달 운동은 손에 꼽아요.'],
+    ['사장님이 내 이름을 알아요.', '이번 주 배달만 3번이 넘어요.'], ['웹툰도 책이라고 생각해요.', '마지막에 읽은 책이 기억 안 나요.'],
+    ['"내일부터 진짜"를 매일 말해요.', '이번 주에도 "내일부터"를 몇 번 했어요.'], ['월급은 카드값이 먼저 가져가요.', '월급이 통장을 스쳐 지나가요.']];
+  if (isMine && type >= 2 && type <= 7) {
+    var saved = null;
+    try { saved = JSON.parse(store('localStorage', 'ft_result') || 'null'); } catch (e) { saved = null; }
+    var sc = saved && saved.type === type && saved.items ? saved.items[type - 2] : null;
+    if (sc === 0 || sc === 1) { var li0 = document.createElement('li'); li0.textContent = ANSWER[type - 2][sc]; $('lines').insertBefore(li0, $('lines').firstChild); }
+  }
 
   if (lv) { // ④ 이대로 10년 뒤 → Lv.N + 미래의 나 + 주 3번만 지켜도
     var goal = Math.min(lv + 15, 50), f = $('future');
