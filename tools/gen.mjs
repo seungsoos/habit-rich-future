@@ -44,8 +44,8 @@ const DESC = '갓생 테스트 결과 · 나도 해 보기'; // 명령 #91
 const INTRO = '텐트부터 건물주까지, 10년 뒤 나는 어디쯤일까요?'; // 명령 #91: 사람이 보는 문구는 한 줄
 const SITE_TITLE = '갓생 테스트: 10년 뒤 나는?';
 const SITE_DESC = '질문 7개로 보는 10년 뒤 내 모습. 1분이면 끝나요.';
-// 서치어드바이저·서치콘솔 소유 확인 — 값을 받으면 NAVER_VERIFY·GOOGLE_VERIFY 로 다시 생성(비어 있으면 넣지 않는다)
-const verify = [['naver-site-verification', process.env.NAVER_VERIFY], ['google-site-verification', process.env.GOOGLE_VERIFY]]
+// 서치어드바이저·서치콘솔 소유 확인(구글은 명령 #100 서치콘솔 'URL 접두어' 속성 값 — 지우면 소유 확인이 풀린다) — 값을 받으면 NAVER_VERIFY·GOOGLE_VERIFY 로 다시 생성(비어 있으면 넣지 않는다)
+const verify = [['naver-site-verification', process.env.NAVER_VERIFY], ['google-site-verification', process.env.GOOGLE_VERIFY ?? 'B2sYDFC_048pgPvN8QG93rnG0qAO0r5gzStSSgMSkoU']]
   .map(([k, v]) => (v ? `<meta name="${k}" content="${v}">` : `<!-- ${k}: ${k === 'naver-site-verification' ? 'NAVER_VERIFY' : 'GOOGLE_VERIFY'}=값 node tools/gen.mjs -->`)).join('\n');
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
