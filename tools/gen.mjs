@@ -41,6 +41,7 @@ const TYPES = [
   { name: '평화로운 현상 유지', scene: 19, tags: ['#무난함', '#중간은간다', '#하던대로'], lines: ['크게 망하지도 뜨지도 않아요.', '하던 대로 하는 게 편해요.', '마음만 먹으면 금방 올라가요.'], good: 1, bad: 7 },
 ];
 const DESC = '갓생 테스트 결과 · 나도 해 보기'; // 명령 #91
+const TAGLINE = '오늘의 습관이 미래의 나를 바꿔요'; // 대표 문장(명령 #109) — 앱 src/game/copy.ts TAGLINE 과 같게. 전: '질문 7개 · 1분이면 끝나요'
 const INTRO = '텐트부터 건물주까지, 10년 뒤 나는 어디쯤일까요?'; // 명령 #91: 사람이 보는 문구는 한 줄
 const SITE_TITLE = '갓생 테스트: 10년 뒤 나는?';
 const SITE_DESC = '질문 7개로 보는 10년 뒤 내 모습. 1분이면 끝나요.';
@@ -141,7 +142,7 @@ ${og('지금 습관 그대로면, 10년 뒤 나는?', `${BASE}img/og/10.png`, BA
     <p id="invite" class="invite" hidden></p>
     <img class="hero" src="img/sq/10.png" width="300" height="300" alt="평범한 직장인">
     <h1>지금 습관 그대로면,<br>10년 뒤 나는?</h1>
-    <p class="sub">질문 7개 · 1분이면 끝나요</p>
+    <p class="sub">${TAGLINE}</p>
     <input id="name" class="nick" maxlength="8" placeholder="이름" autocomplete="off">
     <p id="nameErr" class="hint" hidden>다른 이름으로 써 주세요</p>
     <button id="go" class="primary" disabled>테스트 시작</button>
