@@ -1,7 +1,10 @@
 // 습관부자 갓생 테스트(명령 #84 → #96 심리테스트형) — 시작·질문 7개(index.html)와 유형 결과(t/1~8.html) 공용. 빌드 도구 없음.
 (function () {
   'use strict';
-  var APP_STORE = 'https://apps.apple.com/kr/app/id6820009070';
+  // 앱 링크에 유입 경로를 싣는다(명령 #134) — iOS 캠페인 ct · 안드로이드 Play referrer(utm). pt 는 공개 링크용 제공자 ID(비밀 아님, docs/LINKS.md)
+  var IOS_CAMPAIGN = 'https://apps.apple.com/app/apple-store/id6820009070?pt=129197102&mt=8&ct=';
+  var PLAY = 'https://play.google.com/store/apps/details?id=com.habitrich.app&referrer=';
+  var PLAY_OPEN = false; // 안드로이드 정식 출시 뒤 true — 그 전엔 '곧 출시' 안내
   // 계측(숫자만, 앱 events 와 분리된 web_events — 명령 #87 적용). 공개(publishable/anon) 키만 — 테이블은 insert 만 허용. 서비스 키 금지
   var EVENTS = { url: 'https://kmomnrmdfhhgkfiqskrp.supabase.co', key: 'sb_publishable_jQszQoPn-KTL14d3KvuqcQ_INczf2jG' };
   // 친구 순위표(명령 #95). #96 시안: 서버에 type 칸(tools/shared_results_type.sql)이 아직 없어 꺼 둔다 — ?demo=1 로 화면만
@@ -15,9 +18,12 @@
   var num = function (v) { var n = parseInt(v, 10); return isNaN(n) ? null : n; };
   var FT = window.FT;
 
-  // 유입: ?src=1 스레드 · 2 카톡 · 3 커뮤니티 · 4 블로그 · 9 광고 — 이 탭에서 처음 본 값을 계속 붙인다
-  if (num(params.get('src')) !== null) store('sessionStorage', 'ft_src', String(num(params.get('src'))));
-  var SRC = num(store('sessionStorage', 'ft_src'));
+  // 유입(명령 #134): ?src=threads·insta·disquiet·cafe·ad_meta… (영문 소문자·숫자·_ 20자까지, 그 밖은 버림). 옛 숫자 코드는 이름으로.
+  // 이 탭에서 처음 본 값을 시작 → 결과 → 앱 링크까지 모든 이벤트에 붙인다
+  var OLD_SRC = { 1: 'threads', 2: 'friends', 3: 'community', 4: 'blog', 9: 'ad' };
+  var srcOf = function (v) { v = (v || '').trim().toLowerCase(); return OLD_SRC[v] || (/^[a-z0-9_]{1,20}$/.test(v) ? v : null); };
+  if (srcOf(params.get('src')) && !store('sessionStorage', 'ft_src')) store('sessionStorage', 'ft_src', srcOf(params.get('src')));
+  var SRC = srcOf(store('sessionStorage', 'ft_src'));
   var wid = store('localStorage', 'ft_wid');
   if (!wid) { wid = Math.random().toString(36).slice(2) + Date.now().toString(36); store('localStorage', 'ft_wid', wid); }
   function track(ev, props) {
@@ -216,10 +222,14 @@
     var ua = navigator.userAgent;
     var os = /iPhone|iPad|iPod/.test(ua) ? 1 : /Android/.test(ua) ? 2 : 3;
     track('app_click', { os: os });
-    if (os === 1) { location.href = APP_STORE; return; }
+    var ios = IOS_CAMPAIGN + 'web_' + (SRC || 'direct'); // ct: 웹 테스트에서 왔음 + 경로
+    var play = PLAY + encodeURIComponent('utm_source=' + (SRC || 'direct') + '&utm_medium=webtest');
+    if (os === 1) { location.href = ios; return; }
+    if (os === 2 && PLAY_OPEN) { location.href = play; return; }
     var box = $('stores');
     box.hidden = false;
-    box.innerHTML = (os === 3 ? '<a href="' + APP_STORE + '" target="_blank" rel="noopener">iPhone: App Store에서 받기</a>' : '') + '<span>안드로이드는 곧 출시돼요</span>';
+    box.innerHTML = (os === 3 ? '<a href="' + ios + '" target="_blank" rel="noopener">iPhone: App Store에서 받기</a>' : '')
+      + (PLAY_OPEN ? '<a href="' + play + '" target="_blank" rel="noopener">Android: Play 스토어에서 받기</a>' : '<span>안드로이드는 곧 출시돼요</span>');
   };
 
   // ⑥ 우리 순위(이름 · 유형 · Lv) — 열 때마다 새로 불러온다
