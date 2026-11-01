@@ -18,10 +18,12 @@
   var num = function (v) { var n = parseInt(v, 10); return isNaN(n) ? null : n; };
   var FT = window.FT;
 
-  // 유입(명령 #134): ?src=threads·insta·disquiet·cafe·ad_meta… (영문 소문자·숫자·_ 20자까지, 그 밖은 버림). 옛 숫자 코드는 이름으로.
+  // 유입(명령 #134 → #135): ?src=threads·insta·disquiet·cafe·kakao·ad_meta·ad_apple, 그 밖은 other.
   // 이 탭에서 처음 본 값을 시작 → 결과 → 앱 링크까지 모든 이벤트에 붙인다
-  var OLD_SRC = { 1: 'threads', 2: 'friends', 3: 'community', 4: 'blog', 9: 'ad' };
-  var srcOf = function (v) { v = (v || '').trim().toLowerCase(); return OLD_SRC[v] || (/^[a-z0-9_]{1,20}$/.test(v) ? v : null); };
+  // #135: 정해진 값만 받고 나머지는 other. 옛 숫자 코드 1 = threads · 2 = kakao(카톡), 그 밖은 other. 값이 없으면 null(직접)
+  var SRC_OK = ['threads', 'insta', 'disquiet', 'cafe', 'kakao', 'ad_meta', 'ad_apple'];
+  var OLD_SRC = { 1: 'threads', 2: 'kakao' };
+  var srcOf = function (v) { v = (v || '').trim().toLowerCase(); if (!v) return null; return OLD_SRC[v] || (SRC_OK.indexOf(v) >= 0 ? v : 'other'); };
   if (srcOf(params.get('src')) && !store('sessionStorage', 'ft_src')) store('sessionStorage', 'ft_src', srcOf(params.get('src')));
   var SRC = srcOf(store('sessionStorage', 'ft_src'));
   var wid = store('localStorage', 'ft_wid');
@@ -222,7 +224,7 @@
     var ua = navigator.userAgent;
     var os = /iPhone|iPad|iPod/.test(ua) ? 1 : /Android/.test(ua) ? 2 : 3;
     track('app_click', { os: os });
-    var ios = IOS_CAMPAIGN + 'web_' + (SRC || 'direct'); // ct: 웹 테스트에서 왔음 + 경로
+    var ios = IOS_CAMPAIGN + (SRC || 'direct'); // ct = 경로(#135). ASC 캠페인 보고서에서 ct 별로 본다
     var play = PLAY + encodeURIComponent('utm_source=' + (SRC || 'direct') + '&utm_medium=webtest');
     if (os === 1) { location.href = ios; return; }
     if (os === 2 && PLAY_OPEN) { location.href = play; return; }
