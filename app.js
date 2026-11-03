@@ -4,7 +4,7 @@
   // 앱 링크에 유입 경로를 싣는다(명령 #134) — iOS 캠페인 ct · 안드로이드 Play referrer(utm). pt 는 공개 링크용 제공자 ID(비밀 아님, docs/LINKS.md)
   var IOS_CAMPAIGN = 'https://apps.apple.com/app/apple-store/id6820009070?pt=129197102&mt=8&ct=';
   var PLAY = 'https://play.google.com/store/apps/details?id=com.habitrich.app&referrer=';
-  var PLAY_OPEN = false; // 안드로이드 정식 출시 뒤 true — 그 전엔 '곧 출시' 안내
+  var PLAY_OPEN = true; // 안드로이드 정식 출시 뒤 true (2026-11 켬)
   // 계측(숫자만, 앱 events 와 분리된 web_events — 명령 #87 적용). 공개(publishable/anon) 키만 — 테이블은 insert 만 허용. 서비스 키 금지
   var EVENTS = { url: 'https://kmomnrmdfhhgkfiqskrp.supabase.co', key: 'sb_publishable_jQszQoPn-KTL14d3KvuqcQ_INczf2jG' };
   // 친구 순위표(명령 #95). #96 시안: 서버에 type 칸(tools/shared_results_type.sql)이 아직 없어 꺼 둔다 — ?demo=1 로 화면만
