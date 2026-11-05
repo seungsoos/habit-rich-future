@@ -1,5 +1,5 @@
 // 웹 미래 테스트 생성기(명령 #84) — 앱 소스(칸 이름·NODE_UP/DOWN)를 읽어 data.js 와 결과 페이지 r/1~50.html 을 만든다.
-// 빌드 도구 없이: node web/future-test/tools/gen.mjs   (BASE_URL=https://.../ 로 og 절대 주소를 바꾼다)
+// 빌드 도구 없이: node tools/gen.mjs   (BASE_URL=https://.../ 로 og 절대 주소를 바꾼다)
 // 카톡·스레드 미리보기는 JS 를 안 읽어서 칸마다 정적 HTML 에 og:title·og:image 를 박는다.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -7,7 +7,8 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT = join(HERE, '..');
-const SRC = join(HERE, '..', '..', '..', 'src', 'game');
+// 앱 소스: 이 리포(habit-rich-future)와 나란히 있는 앱 리포 habit-rich-main 의 src/game (#154-1). 다른 위치면 APP_SRC=…/src/game
+const SRC = process.env.APP_SRC ?? join(HERE, '..', '..', 'habit-rich-main', 'src', 'game');
 // ponytail: 배포 주소가 정해지면 BASE_URL 로 다시 생성 — og:image 는 절대 주소여야 카톡이 읽는다
 const BASE = process.env.BASE_URL ?? 'https://seungsoos.github.io/habit-rich-future/';
 
