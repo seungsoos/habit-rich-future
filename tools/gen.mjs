@@ -43,7 +43,8 @@ const TYPES = [
 const DESC = '갓생 테스트 결과 · 나도 해 보기'; // 명령 #91
 const TAGLINE = '오늘의 습관이 미래의 나를 바꿔요'; // 대표 문장(명령 #109) — 앱 src/game/copy.ts TAGLINE 과 같게. 전: '질문 7개 · 1분이면 끝나요'
 const INTRO = '텐트부터 건물주까지, 10년 뒤 나는 어디쯤일까요?'; // 명령 #91: 사람이 보는 문구는 한 줄
-const SITE_TITLE = '갓생 테스트: 10년 뒤 나는?';
+const SITE_TITLE = '갓생 테스트: 10년 뒤 나는? | 습관부자'; // 명령 #154: 제목 끝에 앱 이름
+const IOS_SEO = 'https://apps.apple.com/app/apple-store/id6820009070?pt=129197102&mt=8&ct=seo'; // app.js IOS_CAMPAIGN 과 같은 주소 · JS 없는 소개 글 링크라 ct=seo. Play 링크는 PLAY_OPEN(app.js)만 다룬다 — 여기 넣지 않는다
 const SITE_DESC = '질문 7개로 보는 10년 뒤 내 모습. 1분이면 끝나요.';
 // 서치어드바이저·서치콘솔 소유 확인(구글은 명령 #100 서치콘솔 'URL 접두어' 속성 값 — 지우면 소유 확인이 풀린다) — 값을 받으면 NAVER_VERIFY·GOOGLE_VERIFY 로 다시 생성(비어 있으면 넣지 않는다)
 const verify = [['naver-site-verification', process.env.NAVER_VERIFY], ['google-site-verification', process.env.GOOGLE_VERIFY ?? 'B2sYDFC_048pgPvN8QG93rnG0qAO0r5gzStSSgMSkoU']]
@@ -72,7 +73,7 @@ TYPES.forEach((t, k) => {
   writeFileSync(join(OUT, 't', `${k}.html`), `<!doctype html>
 <html lang="ko"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${esc(t.name)} | 갓생 테스트</title>
+<title>${esc(t.name)} | 갓생 테스트 | 습관부자</title>
 <meta name="description" content="${esc(t.lines.join(' '))}">
 <link rel="canonical" href="${BASE}t/${k}.html">
 ${og(title, `${BASE}img/type/${k}.png`, `${BASE}t/${k}.html`, DESC)}
@@ -98,6 +99,7 @@ ${og(title, `${BASE}img/type/${k}.png`, `${BASE}t/${k}.html`, DESC)}
   <div id="stores" class="stores" hidden></div>
   <p id="toast" class="toast" hidden></p>
   <a id="again" class="again" href="../index.html" hidden>다시 해 보기</a>
+  <p class="about">질문 7개로 보는 10년 뒤 내 모습, 습관부자 갓생 테스트예요.</p>
 </main>
 <footer>재미로 보는 테스트예요 · 습관부자</footer>
 <script src="../data.js"></script><script src="../app.js"></script>
@@ -111,7 +113,7 @@ for (let lv = 1; lv <= 50; lv++) {
   writeFileSync(join(OUT, 'r', `${lv}.html`), `<!doctype html>
 <html lang="ko"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>10년 뒤 나는 ${esc(NAMES[lv - 1])}</title>
+<title>10년 뒤 나는 ${esc(NAMES[lv - 1])} | 습관부자</title>
 <meta name="robots" content="noindex">
 <link rel="canonical" href="${BASE}">
 ${og(`10년 뒤 나는 ${NAMES[lv - 1]}`, `${BASE}img/og/${lv}.png`, `${BASE}r/${lv}.html`, DESC)}
@@ -147,6 +149,14 @@ ${og('지금 습관 그대로면, 10년 뒤 나는?', `${BASE}img/og/10.png`, BA
     <p id="nameErr" class="hint" hidden>다른 이름으로 써 주세요</p>
     <button id="go" class="primary" disabled>테스트 시작</button>
     <p class="about">${INTRO}</p>
+    <section class="intro">
+      <h2>어떤 테스트예요?</h2>
+      <p>질문 7개에 답하면 지금 습관 그대로 10년 뒤 내가 어떤 유형인지 알려 줘요. 1분이면 끝나요.</p>
+      <p class="types">${TYPES.map((t, k) => (t ? `<a href="t/${k}.html">${esc(t.name)}</a>` : '')).filter(Boolean).join(' · ')}</p>
+      <h2>습관부자 앱</h2>
+      <p>습관부자는 지킨 만큼 미래의 내가 한 칸씩 올라가는 습관 앱이에요. 습관마다 정한 시간에 미래의 내가 문자를 보내요. 회원가입 없이 바로 시작해요.</p>
+      <p><a href="${esc(IOS_SEO)}" target="_blank" rel="noopener">App Store에서 받기</a></p>
+    </section>
   </section>
   <section id="quiz" class="quiz" hidden>
     <div class="progress"><div id="bar"></div></div>
