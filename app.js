@@ -177,8 +177,7 @@
   }
 
   if (lv) { // ④ 이대로 10년 뒤 → Lv.N + 미래의 나 + 주 3번만 지켜도
-    var hero = document.querySelector('.hero'); // #177: 그림도 그 레벨(GPT 그림)로
-    if (hero) { hero.src = '../img/art/lv' + (lv < 10 ? '0' : '') + lv + '.webp'; hero.alt = FT.names[lv - 1]; }
+    var hero = $('hero'); if (hero) hero.alt = FT.names[lv - 1]; // 그림은 페이지 안 짧은 스크립트가 처음부터 레벨 그림으로(#177-1)
     var goal = Math.min(lv + 15, 50), f = $('future');
     f.innerHTML = '';
     var h = document.createElement('p'); h.className = 'futurehead'; h.textContent = '이대로 10년 뒤 → ' + lvName(lv);

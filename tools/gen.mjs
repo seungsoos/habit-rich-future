@@ -77,13 +77,13 @@ TYPES.forEach((t, k) => {
 <title>${esc(t.name)} | 갓생 테스트 | 습관부자</title>
 <meta name="description" content="${esc(t.lines.join(' '))}">
 <link rel="canonical" href="${BASE}t/${k}.html">
-${og(title, `${BASE}img/type/${k}.png`, `${BASE}t/${k}.html`, DESC)}
+${og(title, `${BASE}img/share/type-${k}.jpg`, `${BASE}t/${k}.html`, DESC)}
 <link rel="stylesheet" href="../style.css">
 </head><body data-type="${k}">
 <main class="page result">
   <p id="who" class="who" hidden></p>
   <h1 class="typename">${esc(t.name)}</h1>
-  <img class="hero" src="../img/art/lv${String(t.scene).padStart(2, '0')}.webp" width="340" height="340" alt="${esc(t.name)}">
+  <img id="hero" class="hero" width="340" height="340" alt="${esc(t.name)}"><script>(function(){var n=+((/[?&]lv=(\d+)/.exec(location.search)||[])[1]||0),h=document.getElementById('hero');h.src='../img/art/lv'+(n>=1&&n<=50?(n<10?'0':'')+n:'${String(t.scene).padStart(2, '0')}')+'.webp'})()</script><noscript><img class="hero" src="../img/art/lv${String(t.scene).padStart(2, '0')}.webp" width="340" height="340" alt="${esc(t.name)}"></noscript> <!-- #177-1: 처음부터 레벨 그림(깜빡임 없음), 레벨 없으면 유형 그림 -->
   <p class="tags">${t.tags.map(esc).join(' ')}</p>
   <section class="card"><h3>이런 사람이에요</h3><ul id="lines" class="lines">${(t.two ?? t.lines).map((l) => `<li>${esc(l)}</li>`).join('')}</ul></section>
   <section id="future" class="card future" hidden></section>
@@ -141,7 +141,7 @@ writeFileSync(join(OUT, 'index.html'), `<!doctype html>
 <meta name="description" content="${esc(SITE_DESC)}">
 <link rel="canonical" href="${BASE}">
 ${verify}
-${og('지금 습관 그대로면, 10년 뒤 나는?', `${BASE}img/og/10.png`, BASE, SITE_DESC)}
+${og('지금 습관 그대로면, 10년 뒤 나는?', `${BASE}img/share/home.jpg`, BASE, SITE_DESC)}
 <script type="application/ld+json">${JSON.stringify(ld)}</script>
 <link rel="stylesheet" href="style.css">
 </head><body>
