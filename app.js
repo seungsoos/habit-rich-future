@@ -39,6 +39,8 @@
       }).catch(function () {});
     } catch (e) { /* 계측 실패는 버린다 */ }
   }
+  // 들어옴(명령 #176): 탭(세션)마다 한 번만 — src 만, 이름·기기 정보 없음
+  if (!store('sessionStorage', 'ft_seen')) { store('sessionStorage', 'ft_seen', '1'); track('view'); }
 
   // ── 이름(1~8자, 욕설이면 안 받음) · 조사 ──
   var BAD = ['시발', '씨발', 'ㅅㅂ', 'ㅆㅂ', '병신', 'ㅂㅅ', '븅신', '좆', '존나', 'ㅈㄴ', '개새', '새끼', '지랄', '염병', '미친', '닥쳐', 'fuck', 'shit', 'bitch'];
@@ -128,16 +130,7 @@
         if (n) $('mine').textContent = '내 결과 보기 · 친구 ' + n + '명 참여';
       });
     }
-    var input = $('name');
-    input.value = store('localStorage', 'ft_name') || '';
-    var check = function () {
-      var raw = input.value.trim();
-      var ok = !!cleanName(raw);
-      $('go').disabled = !ok;
-      $('nameErr').hidden = !(raw && !ok);
-    };
-    input.addEventListener('input', check); check();
-
+    // 이름은 결과 화면에서 '친구 순위표에 올리기'를 누를 때만 받는다(명령 #176). 예전에 넣은 이름이 있으면 그대로 쓴다
     var i = 0, items = [];
     var show = function () {
       var q = QUESTIONS[i];
@@ -154,14 +147,13 @@
     };
     var finish = function () {
       var score = items.reduce(function (a, b) { return a + b; }, 0);
-      var lv = FT.map[score], type = typeOf(items), name = cleanName(input.value);
+      var lv = FT.map[score], type = typeOf(items), name = cleanName(store('localStorage', 'ft_name'));
       track('done', { lv: lv, score: score, type: type });
-      store('localStorage', 'ft_name', name);
       store('localStorage', 'ft_result', JSON.stringify({ type: type, lv: lv, items: items })); // items: 다시 방문해도 '이런 사람이에요' 첫 줄(명령 #99)
       var go = function () { location.href = 't/' + type + '.html?lv=' + lv + '&me=1'; };
       saveResult(lv, type, from, name).then(go, go);
     };
-    $('go').onclick = function () { if ($('go').disabled) return; track('start'); $('start').hidden = true; $('quiz').hidden = false; show(); };
+    $('go').onclick = function () { track('start'); $('start').hidden = true; $('quiz').hidden = false; show(); };
     return;
   }
 
@@ -263,4 +255,21 @@
     box.appendChild(hh); box.appendChild(ol); box.appendChild(note); box.hidden = false;
   }
   if (isMine || params.get('demo') === '1') fetchBoard().then(showBoard);
+
+  // 친구 순위표에 이름 올리기(명령 #176) — 내 결과이고 아직 이름이 없을 때만
+  if (isMine && !who) {
+    $('nameBox').hidden = false;
+    $('nameSave').onclick = function () {
+      var raw = $('name').value.trim(), name = cleanName(raw);
+      $('nameErr').hidden = !(raw && !name);
+      if (!name) { $('name').focus(); return; }
+      store('localStorage', 'ft_name', name);
+      who = name; $('who').hidden = false; $('who').textContent = who + '님은';
+      $('nameSave').disabled = true;
+      saveResult(lv, type, null, name).then(function () {
+        $('nameBox').hidden = true; toast('친구 순위표에 이름을 올렸어요');
+        fetchBoard().then(showBoard);
+      });
+    };
+  }
 })();

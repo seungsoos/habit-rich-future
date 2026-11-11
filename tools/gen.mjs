@@ -92,6 +92,12 @@ ${og(title, `${BASE}img/type/${k}.png`, `${BASE}t/${k}.html`, DESC)}
     <p><b>안 맞는</b> <a href="${t.bad}.html">${esc(TYPES[t.bad].name)}</a></p>
   </section>
   <section id="board" class="board" hidden></section>
+  <div id="nameBox" class="namebox" hidden>
+    <input id="name" class="nick" maxlength="8" placeholder="이름" autocomplete="off">
+    <p id="nameErr" class="hint" hidden>다른 이름으로 써 주세요</p>
+    <button id="nameSave">친구 순위표에 올리기</button>
+    <p class="note">이름은 나와 바로 연결된 친구에게만 보여요</p>
+  </div>
   <div id="mineActions" class="actions" hidden>
     <button id="share" class="primary">친구한테 보내기</button>
     <button id="app">앱으로 바꿔 보기</button>
@@ -146,9 +152,7 @@ ${og('지금 습관 그대로면, 10년 뒤 나는?', `${BASE}img/og/10.png`, BA
     <img class="hero" src="img/sq/10.png" width="300" height="300" alt="평범한 직장인">
     <h1>지금 습관 그대로면,<br>10년 뒤 나는?</h1>
     <p class="sub">${TAGLINE}</p>
-    <input id="name" class="nick" maxlength="8" placeholder="이름" autocomplete="off">
-    <p id="nameErr" class="hint" hidden>다른 이름으로 써 주세요</p>
-    <button id="go" class="primary" disabled>테스트 시작</button>
+    <button id="go" class="primary">테스트 시작</button>
     <p class="about">${INTRO}</p>
     <section class="intro">
       <h2>어떤 테스트예요?</h2>
