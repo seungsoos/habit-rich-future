@@ -83,7 +83,7 @@ ${og(title, `${BASE}img/type/${k}.png`, `${BASE}t/${k}.html`, DESC)}
 <main class="page result">
   <p id="who" class="who" hidden></p>
   <h1 class="typename">${esc(t.name)}</h1>
-  <img class="hero" src="../img/sq/${t.scene}.png" width="340" height="340" alt="${esc(t.name)}">
+  <img class="hero" src="../img/art/lv${String(t.scene).padStart(2, '0')}.webp" width="340" height="340" alt="${esc(t.name)}">
   <p class="tags">${t.tags.map(esc).join(' ')}</p>
   <section class="card"><h3>이런 사람이에요</h3><ul id="lines" class="lines">${(t.two ?? t.lines).map((l) => `<li>${esc(l)}</li>`).join('')}</ul></section>
   <section id="future" class="card future" hidden></section>
@@ -149,7 +149,7 @@ ${og('지금 습관 그대로면, 10년 뒤 나는?', `${BASE}img/og/10.png`, BA
   <section id="start" class="start">
     <a id="mine" class="mine" hidden></a>
     <p id="invite" class="invite" hidden></p>
-    <img class="hero" src="img/sq/10.png" width="300" height="300" alt="평범한 직장인">
+    <img class="hero" src="img/art/lv10.webp" width="300" height="300" alt="평범한 직장인">
     <h1>지금 습관 그대로면,<br>10년 뒤 나는?</h1>
     <p class="sub">${TAGLINE}</p>
     <button id="go" class="primary">테스트 시작</button>
