@@ -21,7 +21,7 @@
   // 유입(명령 #134 → #135): ?src=threads·insta·disquiet·cafe·kakao·ad_meta·ad_apple·seo(#154-1), 그 밖은 other.
   // 이 탭에서 처음 본 값을 시작 → 결과 → 앱 링크까지 모든 이벤트에 붙인다
   // #135: 정해진 값만 받고 나머지는 other. 옛 숫자 코드 1 = threads · 2 = kakao(카톡), 그 밖은 other. 값이 없으면 null(직접)
-  var SRC_OK = ['threads', 'insta', 'disquiet', 'cafe', 'kakao', 'ad_meta', 'ad_apple', 'seo'];
+  var SRC_OK = ['threads', 'insta', 'disquiet', 'cafe', 'kakao', 'ad_meta', 'ad_apple', 'seo', 'okky']; // okky: 명령 #181
   var OLD_SRC = { 1: 'threads', 2: 'kakao' };
   var srcOf = function (v) { v = (v || '').trim().toLowerCase(); if (!v) return null; return OLD_SRC[v] || (SRC_OK.indexOf(v) >= 0 ? v : 'other'); };
   if (srcOf(params.get('src')) && !store('sessionStorage', 'ft_src')) store('sessionStorage', 'ft_src', srcOf(params.get('src')));
