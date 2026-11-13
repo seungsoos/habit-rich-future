@@ -270,10 +270,11 @@
     sc.onload = function () {
       var q = window.qrcode(0, 'M'); q.addData(qurl); q.make();
       var box = document.createElement('div'); box.className = 'qr';
-      var img = document.createElement('div'); img.className = 'qrimg'; img.innerHTML = q.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+      var img = document.createElement('div'); img.className = 'qrimg'; img.innerHTML = q.createSvgTag({ cellSize: 4, margin: 4, scalable: true });
       var cap = document.createElement('p'); cap.textContent = '폰 카메라로 찍으면 바로 받을 수 있어요';
       box.appendChild(img); box.appendChild(cap);
-      $('app').insertAdjacentElement('afterend', box);
+      $('future').insertAdjacentElement('afterend', box); // #186-1: '이대로 10년 뒤' 바로 아래 — 1280×800 첫 화면에 보이게
+      document.body.classList.add('pcqr');
     };
     document.head.appendChild(sc);
   }

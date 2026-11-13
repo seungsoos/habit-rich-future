@@ -74,7 +74,8 @@ body.invited .page { padding-top: 20px; }
 .intro a { color: var(--green); font-weight: 700; }
 .namebox { display: grid; gap: 8px; margin: 4px 0 12px; }
 .namebox .note { margin: 0; font-size: 13px; color: var(--muted); text-align: center; }
-.qr { display: flex; align-items: center; gap: 14px; padding: 12px; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; }
-.qrimg { width: 116px; height: 116px; flex: none; }
+.qr { display: flex; align-items: center; gap: 18px; padding: 14px; background: #fff; border: 1.5px solid var(--line); border-radius: 14px; }
+.qrimg { width: 160px; height: 160px; flex: none; background: #fff; }
 .qrimg svg { width: 100%; height: 100%; display: block; }
-.qr p { margin: 0; font-size: 15px; font-weight: 800; color: var(--ink); }
+.qr p { margin: 0; font-size: 16px; font-weight: 800; color: var(--ink); }
+body.pcqr .hero { width: 110px; } /* #186-1 PC 결과 화면: 그림을 줄여 QR 이 첫 화면에 들어오게 */
