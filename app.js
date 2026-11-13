@@ -28,9 +28,11 @@
   var SRC = srcOf(store('sessionStorage', 'ft_src'));
   var wid = store('localStorage', 'ft_wid');
   if (!wid) { wid = Math.random().toString(36).slice(2) + Date.now().toString(36); store('localStorage', 'ft_wid', wid); }
+  // 폰/PC 한 칸(명령 #186) — 터치 가능 + 화면 짧은 변 820 미만이면 mobile, 아니면 pc. 기기·브라우저 이름은 안 본다
+  var DEV = ((window.matchMedia && matchMedia('(pointer: coarse)').matches) || 'ontouchstart' in window) && Math.min(screen.width, screen.height) < 820 ? 'mobile' : 'pc';
   function track(ev, props) {
     if (QUIET) return;
-    var p = Object.assign({}, props || {}, { src: SRC });
+    var p = Object.assign({}, props || {}, { src: SRC, dev: DEV });
     try {
       fetch(EVENTS.url + '/rest/v1/web_events', {
         method: 'POST', keepalive: true,
@@ -162,6 +164,7 @@
   var lv = validLv(params.get('lv'));
   var from = SHARE_RE.test(params.get('from') || '') ? params.get('from') : null;
   var isMine = params.get('me') === '1' && !from;
+  var viaQr = params.get('qr') === '1'; // PC 결과 화면 QR 로 폰에서 연 것(#186) — 결과·앱 받기만, 순위표 이름 칸은 안 띄운다
   var who = isMine ? cleanName(store('localStorage', 'ft_name')) : cleanName(params.get('n'));
   if (who) { $('who').hidden = false; $('who').textContent = who + '님은'; }
 
@@ -257,8 +260,26 @@
   }
   if (isMine || params.get('demo') === '1') fetchBoard().then(showBoard);
 
+  // PC 결과 화면: 폰으로 찍는 QR(#186) — 같은 결과 끝 화면(같은 src)을 폰에서 열어 앱 받기로. QR 은 페이지 안(qrcode.js, MIT)에서 그린다(외부 서비스 없음)
+  if (isMine && DEV === 'pc' && lv) {
+    var qs = new URLSearchParams({ lv: lv, me: '1', qr: '1' });
+    if (SRC) qs.set('src', SRC);
+    var qurl = new URL(type + '.html?' + qs.toString(), location.href).toString();
+    var sc = document.createElement('script');
+    sc.src = '../qrcode.js';
+    sc.onload = function () {
+      var q = window.qrcode(0, 'M'); q.addData(qurl); q.make();
+      var box = document.createElement('div'); box.className = 'qr';
+      var img = document.createElement('div'); img.className = 'qrimg'; img.innerHTML = q.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+      var cap = document.createElement('p'); cap.textContent = '폰 카메라로 찍으면 바로 받을 수 있어요';
+      box.appendChild(img); box.appendChild(cap);
+      $('app').insertAdjacentElement('afterend', box);
+    };
+    document.head.appendChild(sc);
+  }
+
   // 친구 순위표에 이름 올리기(명령 #176) — 내 결과이고 아직 이름이 없을 때만
-  if (isMine && !who) {
+  if (isMine && !who && !viaQr) {
     $('nameBox').hidden = false;
     $('nameSave').onclick = function () {
       var raw = $('name').value.trim(), name = cleanName(raw);

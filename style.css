@@ -74,3 +74,7 @@ body.invited .page { padding-top: 20px; }
 .intro a { color: var(--green); font-weight: 700; }
 .namebox { display: grid; gap: 8px; margin: 4px 0 12px; }
 .namebox .note { margin: 0; font-size: 13px; color: var(--muted); text-align: center; }
+.qr { display: flex; align-items: center; gap: 14px; padding: 12px; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; }
+.qrimg { width: 116px; height: 116px; flex: none; }
+.qrimg svg { width: 100%; height: 100%; display: block; }
+.qr p { margin: 0; font-size: 15px; font-weight: 800; color: var(--ink); }
