@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>습관 메이트 초대</title>
+<meta name="description" content="친구가 습관부자에서 습관 메이트로 초대했어요. 같이 체크하면서 이번 주 체크 수를 나란히 볼 수 있어요.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .inv { max-width: 420px; margin: 0 auto; padding: 40px 16px 56px; text-align: center; }
+  .inv h1 { font-size: 22px; margin: 0 0 8px; }
+  .inv p { margin: 6px 0; line-height: 1.6; }
+  .code { font: 800 44px/1.1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 6px; margin: 24px 0 8px; user-select: all; }
+  .row { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+  .row a, .row button { display: block; padding: 14px; border-radius: 14px; font-size: 16px; font-weight: 700; text-decoration: none; border: 0; cursor: pointer; }
+  .pri { background: #2E7D4F; color: #fff; }
+  .sec { background: #ECE7DC; color: #222; }
+  .hint { font-size: 14px; color: #6b6b6b; }
+  .copied { font-size: 14px; color: #2E7D4F; min-height: 20px; }
+</style>
+</head>
+<body>
+<main class="inv">
+  <h1>습관 메이트로 초대받았어요</h1>
+  <p>같이 체크하면서 거지 탈출해요.<br>앱을 열면 바로 연결할지 물어봐요.</p>
+  <div class="code" id="code">------</div>
+  <div class="copied" id="copied"></div>
+  <div class="row">
+    <button class="sec" id="copy" type="button">코드 복사</button>
+    <a class="pri" id="open" href="#">앱에서 열기</a>
+    <a class="sec" id="ios" href="#" rel="noopener">App Store에서 받기</a>
+    <a class="sec" id="aos" href="#" rel="noopener">Google Play에서 받기</a>
+  </div>
+  <p class="hint">앱이 없으면 받은 뒤 이 페이지의 [앱에서 열기]를 한 번 더 눌러 주세요.<br>안 되면 [랭킹 → 코드로 추가]에 위 코드를 넣어도 돼요.</p>
+</main>
+<script>
+(function () {
+  'use strict';
+  var EVENTS = { url: 'https://kmomnrmdfhhgkfiqskrp.supabase.co', key: 'sb_publishable_jQszQoPn-KTL14d3KvuqcQ_INczf2jG' };
+  var ok = /^[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{6}$/; // 0·O·1·I·L 없음(앱·서버와 같게)
+  var c = (new URLSearchParams(location.search).get('c') || '').toUpperCase().replace(/[^0-9A-Z]/g, '').slice(0, 6);
+  if (!ok.test(c)) c = '';
+  var $ = function (id) { return document.getElementById(id); };
+  $('code').textContent = c || '코드 없음';
+  $('open').href = 'habitrich://invite' + (c ? '?c=' + c : '');
+  $('ios').href = 'https://apps.apple.com/app/apple-store/id6820009070?pt=129197102&mt=8&ct=invite';
+  $('aos').href = 'https://play.google.com/store/apps/details?id=com.habitrich.app&referrer=' + encodeURIComponent('utm_source=invite&utm_medium=web' + (c ? '&utm_content=' + c : ''));
+  var quiet = location.protocol === 'file:' || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  var wid; try { wid = localStorage.getItem('ft_wid'); if (!wid) { wid = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('ft_wid', wid); } } catch (e) { wid = 'anon' + Date.now().toString(36); }
+  // 계측: 숫자·정해진 값만(코드는 보내지 않음) — page 'invite', to 1 앱 열기 · 2 iOS · 3 안드로이드 · 4 복사
+  function track(ev, to) {
+    if (quiet) return;
+    try { fetch(EVENTS.url + '/rest/v1/web_events', { method: 'POST', keepalive: true, headers: { apikey: EVENTS.key, Authorization: 'Bearer ' + EVENTS.key, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify({ wid: wid, ev: ev, props: to ? { page: 'invite', to: to } : { page: 'invite', has_code: c ? 1 : 0 } }) }).catch(function () {}); } catch (e) {}
+  }
+  track('view');
+  // 안드로이드는 바로 Play 로(초대 코드를 설치 경로에 실어 설치 뒤 자동 연결). 한 탭에 한 번만
+  var isAndroid = /Android/i.test(navigator.userAgent);
+  if (isAndroid && c) { try { if (!sessionStorage.getItem('inv_go')) { sessionStorage.setItem('inv_go', '1'); track('app_click', 3); setTimeout(function () { location.href = $('aos').href; }, 300); } } catch (e) {} }
+  $('open').addEventListener('click', function () { track('app_click', 1); });
+  $('ios').addEventListener('click', function () { track('app_click', 2); });
+  $('aos').addEventListener('click', function () { track('app_click', 3); });
+  $('copy').addEventListener('click', function () {
+    if (!c) return;
+    var done = function () { $('copied').textContent = '복사했어요'; };
+    if (navigator.clipboard) navigator.clipboard.writeText(c).then(done, function () {}); else done();
+    track('app_click', 4);
+  });
+})();
+</script>
+</body>
+</html>
