@@ -22,7 +22,7 @@
 <body>
 <main class="inv">
   <h1>습관 메이트로 초대받았어요</h1>
-  <p>같이 체크하면서 거지 탈출해요.<br>앱을 열면 바로 연결할지 물어봐요.</p>
+  <p>같이 체크하면서 거지 탈출해요.<br><span id="sub">앱을 열면 바로 연결할지 물어봐요.</span></p>
   <div class="row">
     <a class="pri" id="ios" href="#" rel="noopener" hidden>App Store에서 받기</a>
     <a class="pri" id="aos" href="#" rel="noopener" hidden>Google Play에서 받기</a>
@@ -48,6 +48,8 @@
   if (!isIOS) $('aos').hidden = false;
   if (!isAndroid) $('ios').hidden = false;
   if (c) { $('code').textContent = c; $('fine').hidden = false; }
+  // #218-3 iOS 는 설치 경로로 코드를 못 실음 — 설치 뒤 이 페이지로 돌아와 [앱에서 열기]
+  if (isIOS) $('sub').textContent = '설치한 뒤 이 페이지로 돌아와서 [앱에서 열기]를 눌러 주세요.';
   var quiet = location.protocol === 'file:' || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
   var wid; try { wid = localStorage.getItem('ft_wid'); if (!wid) { wid = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem('ft_wid', wid); } } catch (e) { wid = 'anon' + Date.now().toString(36); }
   // 계측: 숫자·정해진 값만(코드는 보내지 않음) — page 'invite', to 1 앱 열기 · 2 iOS · 3 안드로이드
