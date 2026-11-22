@@ -41,13 +41,16 @@
   var ua = navigator.userAgent;
   var isAndroid = /Android/i.test(ua);
   var isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
-  $('open').href = 'habitrich://invite' + (c ? '?c=' + c : '');
+  $('open').href = 'habitrich://invite' + (c ? '?code=' + c : '');
   $('ios').href = 'https://apps.apple.com/app/apple-store/id6820009070?pt=129197102&mt=8&ct=invite';
   $('aos').href = 'https://play.google.com/store/apps/details?id=com.habitrich.app&referrer=' + encodeURIComponent('utm_source=invite&utm_medium=web' + (c ? '&utm_content=' + c : ''));
   // 기기별 메인 버튼: 안드로이드 = Play · iOS = App Store · PC = 둘 다
   if (!isIOS) $('aos').hidden = false;
   if (!isAndroid) $('ios').hidden = false;
   if (c) { $('code').textContent = c; $('fine').hidden = false; }
+  // #218-7 안드로이드: intent 링크 — 앱이 있으면 앱이 열려 메이트 확인, 없으면 Play(초대 코드를 설치 경로에 실음)
+  var intent = isAndroid ? 'intent://invite' + (c ? '?code=' + c : '') + '#Intent;scheme=habitrich;package=com.habitrich.app;S.browser_fallback_url=' + encodeURIComponent($('aos').href) + ';end' : null;
+  if (intent) $('open').href = intent;
   // #218-3 iOS 는 설치 경로로 코드를 못 실음 — 설치 뒤 이 페이지로 돌아와 [앱에서 열기]
   if (isIOS) $('sub').textContent = '설치한 뒤 이 페이지로 돌아와서 [앱에서 열기]를 눌러 주세요.';
   var quiet = location.protocol === 'file:' || /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
@@ -59,7 +62,8 @@
   }
   track('view');
   // 안드로이드는 바로 Play 로(초대 코드를 설치 경로에 실어 설치 뒤 자동 연결). 한 탭에 한 번만
-  if (isAndroid && c) { try { if (!sessionStorage.getItem('inv_go')) { sessionStorage.setItem('inv_go', '1'); track('app_click', 3); setTimeout(function () { location.href = $('aos').href; }, 300); } } catch (e) {} }
+  // 안드로이드는 열리면 한 번 intent 로 이동(앱 있으면 앱, 없으면 Play). 한 탭에 한 번만 — 뒤로 오면 버튼으로
+  if (intent && c) { try { if (!sessionStorage.getItem('inv_go')) { sessionStorage.setItem('inv_go', '1'); track('app_click', 1); setTimeout(function () { location.href = intent; }, 300); } } catch (e) {} }
   $('open').addEventListener('click', function () { track('app_click', 1); });
   $('ios').addEventListener('click', function () { track('app_click', 2); });
   $('aos').addEventListener('click', function () { track('app_click', 3); });
